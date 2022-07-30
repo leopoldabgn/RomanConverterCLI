@@ -12,14 +12,26 @@ public class RomanConverter
 		String nb;
 		int temp;
 		boolean bool = true;
-		//boolean cli = args.length >= 1 && args[1].equals("-i");
-		//System.out.println(args.length+" "+cli);
-		while(bool)
+		boolean cli = args.length >= 1;
+
+		if(args.length >= 1 && args[0].equals("--help"))
+		{
+			help();
+			sc.close();
+			return;
+		}
+
+		do
 		{
 			do
 			{
-				System.out.print("\nGive me a roman numeral to convert : ");
-				nb = sc.nextLine();
+				if(!cli)
+				{
+					System.out.print("\nGive me a roman numeral to convert : ");
+					nb = sc.nextLine();
+				}
+				else
+					nb = args[0];
 				
 				if(isInteger(nb))
 				{
@@ -34,16 +46,20 @@ public class RomanConverter
 						System.out.println("Your number must be less than 4000.");
 						nb = "null";
 					}
-					
 				}
 				
-			}while(!isInteger(nb));
+			} while(!isInteger(nb) && !cli);
 
-			System.out.println("\n"+convert(nb));
-			System.out.println("\nAnother one ? y/n");
-			if(sc.nextLine().toUpperCase().charAt(0) != 'Y')
-				bool = false;
-		}
+			System.out.println((cli ? "" : "\n")+convert(nb));
+
+			if(!cli)
+			{
+				System.out.println("\nAnother one ? y/n");
+				if(sc.nextLine().toUpperCase().charAt(0) != 'Y')
+					bool = false;
+			}
+
+		} while(bool && !cli);
 		sc.close();
 	}
 
@@ -121,5 +137,11 @@ public class RomanConverter
 			return false;
 		}
 	}
-	
+
+	public static void help()
+	{
+		System.out.println("Help :");
+		System.out.println("java RomanConverter.java [number]");
+	}
+
 }
